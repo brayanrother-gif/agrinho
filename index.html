@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agrinho 2026 - Pensamento Computacional | Missal - PR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CONFIGURAÇÕES GERAIS E PALETA DE CORES --- */
+        :root {
+            --verde-escuro: #0f2a24;
+            --verde-agro: #007a6e;       
+            --verde-claro: #00a896;      
+            --verde-folha: #028090;      
+            --neon-green: #52b788;
+            --dourado: #ffb703;
+            --dourado-brilho: #fb8500;
+            --terra: #6c584c;
+            --branco: #ffffff;
+            --texto-escuro: #212529;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--texto-escuro);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            
+            /* --- 1º ANIMAÇÃO: FUNDO QUE MUDA DE COR SOZINHO --- */
+            background: linear-gradient(125deg, #f1f7f5, #e1f5f2, #e8f0ed, #d8ece7);
+            background-size: 400% 400%;
+            animation: fundoDegrade 16s ease infinite;
+        }
+
+        @keyframes fundoDegrade {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- 2º ANIMAÇÃO: BOLINHAS QUE SE MEXEM (SUBINDO E BALANÇANDO) --- */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -120px;
+            background: linear-gradient(135deg, rgba(0, 168, 150, 0.18), rgba(2, 128, 144, 0.05));
+            border-radius: 50%;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: subirEBalancar 12s infinite ease-in-out;
+        }
+
+        /* Modificando tamanhos, posições iniciais e tempo de subida de cada bolinha */
+        .bubble:nth-child(1) { width: 40px; height: 40px; left: 10%; animation-duration: 9s; animation-delay: 0s; }
+        .bubble:nth-child(2) { width: 90px; height: 90px; left: 25%; animation-duration: 15s; animation-delay: 1s; }
+        .bubble:nth-child(3) { width: 35px; height: 35px; left: 45%; animation-duration: 7s; animation-delay: 3s; }
+        .bubble:nth-child(4) { width: 120px; height: 120px; left: 60%; animation-duration: 19s; animation-delay: 0s; }
+        .bubble:nth-child(5) { width: 55px; height: 55px; left: 75%; animation-duration: 11s; animation-delay: 4s; }
+        .bubble:nth-child(6) { width: 75px; height: 75px; left: 88%; animation-duration: 13s; animation-delay: 2s; }
+
+        /* Animação complexa que faz a bolinha subir e ir para os lados ao mesmo tempo */
+        @keyframes subirEBalancar {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            33% {
+                transform: translateY(-35vh) translateX(30px) scale(0.9);
+            }
+            66% {
+                transform: translateY(-70vh) translateX(-30px) scale(1.1);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-120vh) translateX(10px) scale(1.3);
+                opacity: 0;
+            }
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+
+        /* --- HEADER E NAVEGAÇÃO --- */
+        header {
+            background: rgba(15, 42, 36, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--verde-claro);
+        }
+
+        .logo {
+            color: var(--branco);
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--dourado);
+            text-shadow: 0 0 10px rgba(255, 183, 3, 0.5);
+        }
+
+        nav a {
+            color: var(--branco);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--dourado);
+            transition: 0.3s;
+        }
+
+        nav a:hover::after { width: 100%; }
+        nav a:hover { color: var(--dourado); }
+
+        /* --- HERO BANNER --- */
+        .hero {
+            background: linear-gradient(rgba(15, 42, 36, 0.85), rgba(0, 122, 110, 0.75)), 
+                        url('https://images.unsplash.com/photo-1592417817098-8f3d6eb19675?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--branco);
+            padding: 0 20px;
+            position: relative;
+            border-bottom: 8px solid var(--verde-claro);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 2px 4px 10px rgba(0,0,0,0.5);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero h1 span {
+            color: var(--dourado);
+            border-bottom: 3px dashed var(--dourado);
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            max-width: 850px;
+            margin-bottom: 40px;
+            font-weight: 300;
+            text-shadow: 1px 2px 5px rgba(0,0,0,0.5);
+            animation: fadeInUp 1s ease-out 0.3s backwards;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--dourado), var(--dourado-brilho));
+            color: var(--verde-escuro);
+            padding: 15px 40px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            box-shadow: 0 5px 20px rgba(255, 183, 3, 0.4);
+            letter-spacing: 1px;
+            animation: fadeInUp 1s ease-out 0.6s backwards;
+        }
+
+        .btn:hover {
+            background: var(--branco);
+            color: var(--verde-agro);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255,255,255,0.4);
+        }
+
+        /* --- CONTEÚDO PRINCIPAL --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            color: var(--verde-escuro);
+            font-size: 2.6rem;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '🌐';
+            display: block;
+            font-size: 1.5rem;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--terra);
+            margin-bottom: 50px;
+            font-size: 1.2rem;
+        }
+
+        /* --- REGIONAL MISSAL - PR --- */
+        .missal-section {
+            background-color: var(--branco);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+            margin-bottom: 80px;
+            border-left: 10px solid var(--verde-claro);
+        }
+
+        .missal-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .missal-text h2 {
+            color: var(--verde-escuro);
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .missal-text p {
+            margin-bottom: 20px;
+            text-align: justify;
+            color: #4a4a4a;
+        }
+
+        .missal-badge-container {
+            text-align: center;
+        }
+
+        .missal-badge {
+            background: linear-gradient(145deg, #ffffff, #e1f5f2);
+            padding: 35px;
+            border-radius: 15px;
+            border: 2px dashed var(--verde-claro);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+        }
+
+        .missal-badge h3 {
+            color: var(--verde-agro);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .missal-badge ul {
+            text-align: left;
+            list-style: none;
+            font-size: 0.95rem;
+            color: var(--terra);
+        }
+
+        .missal-badge ul li {
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .missal-badge ul li::before {
+            content: '•';
+            color: var(--verde-claro);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* --- CATEGORIAS DO PENSAMENTO COMPUTACIONAL --- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+        }
+
+        .card {
+            background-color: var(--branco);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-bottom: 5px solid var(--verde-claro);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 15px 35px rgba(0, 168, 150, 0.2);
+            border-bottom-color: var(--dourado);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--verde-escuro), var(--verde-agro));
+            color: var(--branco);
+            padding: 25px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            border-bottom: 3px solid var(--dourado);
+        }
+
+        .card-body {
+            padding: 30px;
+            flex-grow: 1;
+        }
+
+        .card-body p {
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .card-body ul {
+            list-style-type: none;
+            margin-top: 15px;
+        }
+
+        .card-body ul li {
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .card-body ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--branco);
+            font-weight: bold;
+            background: var(--verde-claro);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        /* --- REQUISITOS E CRITÉRIOS DE SUCESSO --- */
+        .requisitos {
+            background: linear-gradient(135deg, var(--verde-escuro), #081714);
+            color: var(--branco);
+            padding: 80px 40px;
+            margin-top: 80px;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            position: relative;
+        }
+
+        .requisitos .section-title { color: var(--branco); }
+        .requisitos .subtitle { color: var(--verde-claro); }
+
+        .req-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 30px;
+            padding-top: 20px;
+        }
+
+        .req-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border-top: 4px solid var(--dourado);
+            transition: 0.3s;
+        }
+
+        .req-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.03);
+        }
+
+        .req-item h4 {
+            color: var(--dourado);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        .req-item p {
+            font-size: 0.95rem;
+            color: #dddddd;
+        }
+
+        .obs-premiacao {
+            text-align: center;
+            margin-top: 50px;
+            padding: 15px 30px;
+            font-style: italic;
+            color: var(--dourado);
+            background: rgba(255, 183, 3, 0.1);
+            border-radius: 50px;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            position: relative;
+            font-weight: 600;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #050d0b;
+            color: rgba(255,255,255,0.6);
+            text-align: center;
+            padding: 50px 20px;
+            margin-top: 80px;
+            font-size: 0.9rem;
+            border-top: 5px solid var(--dourado);
+        }
+
+        footer p span {
+            color: var(--branco);
+            font-weight: bold;
+        }
+
+        /* --- ANIMAÇÕES AUXILIARES --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- RESPONSIVIDADE --- */
+        @media (max-width: 992px) {
+            .missal-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+        }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; padding: 15px; }
+            nav { margin-top: 15px; }
+            nav a { margin: 0 10px; font-size: 0.85rem; }
+            .hero { padding-top: 80px; }
+            .obs-premiacao { border-radius: 15px; transform: none; left: 0; display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="animated-bg">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <header>
+        <div class="logo">Agrinho<span>2026</span></div>
+        <nav>
+            <a href="#missal">Missal Forte</a>
+            <a href="#categorias">Categorias</a>
+            <a href="#criterios">Critérios</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Agro Forte, Futuro <span>Sustentável</span></h1>
+        <p>Inovação, Pensamento Computacional e Tecnologia unindo a força do campo com o equilíbrio do meio ambiente na rede estadual de ensino.</p>
+        <a href="#categorias" class="btn">Explorar Soluções Tecnológicas</a>
+    </section>
+
+    <div class="container">
+
+        <section id="missal" class="missal-section">
+            <div class="missal-grid">
+                <div class="missal-text">
+                    <h2>Missal, Paraná: Tecnologia que Brota da Terra</h2>
+                    <p>
+                        Localizado no exuberante Oeste do Paraná, o município de <strong>Missal</strong> é um exemplo vivo da força da agricultura familiar, da produção integrada e do forte cooperativismo regional. Aqui, a tecnologia trabalhada nas salas de aula estaduais encontra solo fértil para se transformar em impacto real na comunidade.
+                    </p>
+                    <p>
+                        Através das disciplinas de <strong>Pensamento Computacional</strong> e das oficinas de <strong>Robótica</strong>, os estudantes missalenses analisam ativamente os desafios do cotidiano rural — como a otimização de recursos hídricos, manejos inteligentes de solo, previsão climática local e eficiência na agricultura familiar — desenvolvendo algoritmos e protótipos focados no lema do concurso de 2026.
+                    </p>
+                </div>
+                <div class="missal-badge-container">
+                    <div class="missal-badge">
+                        <h3>Foco Regional 🌾</h3>
+                        <ul>
+                            <li>Grande destaque na produção de grãos (soja e milho)</li>
+                            <li>Bacia leiteira e suinocultura de precisão em expansão</li>
+                            <li>Integração das escolas com cooperativas locais</li>
+                            <li>Forte apelo para a preservação da mata nativa ciliar</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="categorias">
+            <h2 class="section-title">Categorias Tecnológicas</h2>
+            <p class="subtitle">O Pensamento Computacional moldando novas soluções para o agronegócio paranaense</p>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">Programação: Ensino Fundamental</div>
+                    <div class="card-body">
+                        <p>Estudantes do 6º ao 9º ano utilizam a criatividade e blocos lógicos para conscientizar e solucionar problemas práticos do campo.</p>
+                        <ul>
+                            <li><strong>Ferramenta:</strong> Scratch (programação visual em blocos)</li>
+                            <li><strong>Foco dos Projetos:</strong> Jogos educativos interativos, animações explicativas sobre sustentabilidade ou simuladores simples de colheita.</li>
+                            <li><strong>Aplicação Prática:</strong> Campanhas digitais voltadas para a conservação das águas e destinação correta de embalagens de defensivos agrícolas.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Programação: Ensino Médio</div>
+                    <div class="card-body">
+                        <p>Alunos da 1ª à 4ª série utilizam linguagens de programação de mercado para estruturar aplicações completas e utilizáveis.</p>
+                        <ul>
+                            <li><strong>Tecnologias:</strong> HTML5, CSS3 e linguagens lógicas como JavaScript ou Python.</li>
+                            <li><strong>Foco dos Projetos:</strong> Desenvolvimento de Web Apps, plataformas informativas e calculadoras de pegada de carbono para pequenas propriedades.</li>
+                            <li><strong>Aplicação Prática:</strong> Softwares utilitários criados sob medida para controle de estoque de pequenos produtores de Missal.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Robótica (Geral)</div>
+                    <div class="card-body">
+                        <p>A fusão perfeita entre a lógica computacional e o mundo físico por meio de automação e eletrônica aplicada.</p>
+                        <ul>
+                            <li><strong>Componentes:</strong> Placas programáveis (Arduino/Bit:Kit) e sensores físicos diversos.</li>
+                            <li><strong>Formação:</strong> Equipes colaborativas compostas por até 4 estudantes e 1 professor orientador da rede.</li>
+                            <li><strong>Exemplos Reais:</strong> Estufas automatizadas, sensores inteligentes de umidade do solo, irrigadores solares automatizados e chocadeiras conectadas.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="criterios" class="requisitos">
+            <h2 class="section-title">Critérios de Avaliação 2026</h2>
+            <p class="subtitle">O caminho regulamentar para destacar seu projeto na Etapa Estadual</p>
+            
+            <div class="req-grid">
+                <div class="req-item">
+                    <h4>Inovação</h4>
+                    <p>Originalidade e criatividade aplicada na solução de um problema real que uma produtividade e preservação ambiental.</p>
+                </div>
+                <div class="req-item">
+                    <h4>Complexidade</h4>
+                    <p>Uso adequado e avançado da lógica matemática, estruturas condicionais, variáveis e eficiência do código desenvolvido.</p>
+                </div>
+                <div class="req-item">
+                    <h4>Impacto Social</h4>
+                    <p>Potencial de aplicabilidade da solução na comunidade escolar, na cidade de Missal ou diretamente no dia a dia do produtor rural.</p>
+                </div>
+                <div class="req-item">
+                    <h4>Organização</h4>
+                    <p>Qualidade da apresentação visual, clareza na documentação das etapas (diário de bordo) e comentários inseridos no código fonte.</p>
+                </div>
+            </div>
+            
+            <span class="obs-premiacao">
+                * Cerimônia do Prêmio Estadual em Novembro de 2026 em Curitiba/PR. Reconhecimento com Smartphones e Notebooks para alunos e professores!
+            </span>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>Projeto Didático inspirado no <strong>Programa Agrinho 2026</strong></p>
+        <p>Foco Regional: <span>Município de Missal - NRE Foz do Iguaçu</span> | Parceria entre SEED-PR e o Sistema FAEP/SENAR-PR</p>
+        <p style="margin-top: 15px; font-size: 0.8rem; opacity: 0.5;">&copy; 2026 Pensamento Computacional & Sustentabilidade no Campo. Todos os direitos reservados.</p>
+    </footer>
+
+</body>
+</html>
